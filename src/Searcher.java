@@ -9,8 +9,7 @@ public class Searcher {
     private static String savePath = "D:\\!designBurg!\\Desktop\\From_order";;
     private static String searchPath = "D:\\!designBurg!\\Desktop\\ORDER";
     private static int folderName = 0;
-    //asdasd
-    //asdasdasdasd
+
     int a = 5;
 
     public static void main(String[] args) throws IOException {
