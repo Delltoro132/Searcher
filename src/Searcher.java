@@ -4,45 +4,59 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Searcher {
-    private static String savePath = "D:\\!designBurg!\\Desktop\\From_order";;
-    private static String searchPath = "D:\\!designBurg!\\Desktop\\ORDER";
+    private static String savePath = "D:\\!designBurg!\\Desktop\\From_order";
+    private static String searchPath = "Z:\\For_office\\Logos";
     private static int folderName = 0;
 
-    int a = 5;
-
     public static void main(String[] args) throws IOException {
-        getFiles(new File(searchPath));
+
+        ArrayList<File> fileList = new ArrayList<>();
+        getFiles(new File(searchPath), fileList);
+        for(File file: fileList) {
+            System.out.println(file.getAbsolutePath());
+        }
     }
 
-    private static void getFiles(File rootFile) throws IOException {
+    private static void getFiles(File rootFile, List<File> fileList) throws IOException {
         if (rootFile.isDirectory()) {
 
             File[] directoryFiles = rootFile.listFiles();
             if (directoryFiles != null) {
                 for (File file : directoryFiles) {
+
                     if (file.isDirectory() && !file.toString().contains("out")  && !file.toString().contains("print")
                             && !file.toString().contains("work")  && !file.toString().contains("utv")) {
-
-                        getFiles(file);
+                        System.out.println("Ищу в: " + file);
+                        getFiles(file, fileList);
                     } else {
                         if (file.getName().toLowerCase().contains("logo")) {
-                            Path path = Paths.get(rootFile.getAbsolutePath());
+                            fileList.add(file);
+
+                            Path path = Paths.get( savePath + "\\" + folderName);
                             String fileName = file.getName();
-                            String newPath = savePath + "\\" + fileName;
+                            String newPath = savePath;
                             String oldPath = file.getAbsolutePath();
 
-                            if (!Files.exists(path)) {
-                                Files.createDirectory(Path.of(savePath + "\\" + folderName));
-                                System.out.println("Папка создана: " + Path.of(savePath + "\\" + folderName));
+                            if (Files.exists(path)){
+                                System.out.println("Папка уже существует");
                             }
-                            copy(newPath + folderName, oldPath);
+                            else {
+                                Files.createDirectory(Path.of(savePath + "\\" + folderName));
+                                System.out.println("Папка создана");
 
-                            folderName += 1;
+                            }
+
+                            copy(newPath + "\\" + folderName +  "\\" + fileName, oldPath);
+
                         }
                     }
                 }
+                folderName += 1;
             }
         }
     }
